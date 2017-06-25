@@ -1,0 +1,136 @@
+// 將您的設定放入此檔案中以覆寫預設值和使用者設定。
+{
+	"statusbar_scheduler.macros": [
+		{
+			"name": "startDebug",
+			"macro": [
+				{ "command": "workbench.action.debug.restart"},
+				{ "command": "workbench.action.debug.start"}
+			]
+		}, {
+			"name": "openPanel",
+			"macro": [
+				{ "command": "workbench.action.closePanel"},
+				{ "command": "workbench.action.togglePanel"}
+			]
+		}
+	],
+
+	// array of schedules
+	"statusbar_scheduler.schedules": [
+		
+		{
+			"text": "Run test.py",
+			"tooltip": "Run test.py",
+			"alignment": "left",
+			"schedule": [
+				{ "command": "workbench.action.focusActiveEditorGroup"},
+				{ "command": "workbench.action.debug.stop"},
+				{ "action": "delay", "args": ["200"] },
+				{ "command": "vscode.startDebug", "args": ["Run test.py"] },
+				{ "macro": "openPanel"}
+			]
+		},
+		{
+			"text": "Run test2.py",
+			"tooltip": "Run test2.py",
+			"alignment": "left",
+			"schedule": [
+				{ "command": "workbench.action.focusActiveEditorGroup"},
+				{ "command": "workbench.action.debug.stop"},
+				{ "action": "delay", "args": ["200"] },
+				{ "command": "vscode.startDebug", "args": ["Run test2.py"] },
+				{ "macro": "openPanel"}
+			]
+		},
+
+		
+
+		{
+			"text": "Show Command",
+			"tooltip": "Show Command",
+			"alignment": "left",
+			"schedule": [
+				{ "action": "showCommand" }
+			]
+		}, {
+			"text": "Start Debug & Open Panel",
+			"tooltip": "Start Debug & Open Panel",
+			"triggerCommand": "extension.shedule.startDebugAndOpenPanel",
+			"alignment": "left",
+			"color": "#40ff40",
+			"schedule": [
+				{ "command": "workbench.action.focusActiveEditorGroup"},
+				{ "macro": "startDebug"},
+				{ "macro": "openPanel"}
+			]
+		}, {
+			"text": "Stop Debug & Close Panel",
+			"tooltip": "Stop Debug & Close Panel",
+			"triggerCommand": "extension.shedule.stopDebugAndClosePanel",
+			"alignment": "left",
+			"color": "#ffa0a0",
+			"schedule": [
+				{ "command": "workbench.action.focusActiveEditorGroup"},
+				{ "command": "workbench.action.debug.stop"},
+				{ "action": "delay", "args": ["200"] },
+				{ "command": "workbench.action.closePanel"}
+			]
+		}, {
+			"text": "Test",
+			
+			"tooltip": "Test",
+			"color": "#40ff40",
+			"alignment": "left",
+			"schedule": [
+				{ "action": "log", "args": ["Start!"] },
+				{ "action": "delay", "args": ["1000"] },
+				{ "action": "log", "args": ["1s"] },
+				{ "action": "delay", "args": ["1000"] },
+				{ "action": "log", "args": ["2s"] },
+				{ "action": "delay", "args": ["1000"] },
+				{ "action": "log", "args": ["3s"] },
+				{ "action": "log", "args": ["End!"] }
+			]
+		},
+
+/*
+
+		{
+			"text": "Loop",
+			"tooltip": "Loop",
+			"triggerCommand": "extension.shedule.loop",
+			"alignment": "left",
+			"schedule": [
+				{ "action": "delay", "args": ["1000"]},
+				{ "action": "log", "args": ["execute 'extension.shedule.a'"]},
+				{ "command": "extension.shedule.a" },
+				{ "action": "log", "args": ["loop end"]}	
+			]
+		},
+		{
+			"text": "A",
+			"tooltip": "A",
+			"triggerCommand": "extension.shedule.a",
+			"alignment": "left",
+			"schedule": [
+				{ "action": "delay", "args": ["1000"]},
+				{ "action": "log", "args": ["execute 'extension.shedule.b'"]},
+				{ "command": "extension.shedule.b" },
+				{ "action": "log", "args": ["a end"]}
+			]
+		},
+		{
+			"text": "B",
+			"tooltip": "B",
+			"triggerCommand": "extension.shedule.b",
+			"alignment": "left",
+			"schedule": [
+				{ "action": "delay", "args": ["1000"]},
+				{ "action": "log", "args": ["execute 'extension.shedule.a'"]},
+				{ "command": "extension.shedule.a" },
+				{ "action": "log", "args": ["b end"]}
+			]
+		}
+	]
+}

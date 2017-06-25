@@ -1,9 +1,9 @@
 {
-    "name": "statusbar-commands",
-    "displayName": "statusbar-commands",
-    "description": "extend the statusbar with own commands",
-    "version": "0.0.2",
-    "publisher": "anweber",
+    "name": "statusbar-scheduler",
+    "displayName": "statusbar-scheduler",
+    "description": "",
+    "version": "0.0.1",
+    "publisher": "nicolas",
     "engines": {
         "vscode": "^1.0.0"
     },
@@ -15,79 +15,91 @@
     ],
     "keywords": [
         "statusbar",
-        "command",
+        "scheduler",
         "toolbar"
     ],
     "icon": "icon.png",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/AnWeber/vscode-statusbar-command"
-    },
-    "bugs": {
-        "url": "https://github.com/AnWeber/vscode-statusbar-command/issues"
-    },
     "main": "./out/src/extension",
     "contributes": {
         "configuration": {
             "type": "object",
-            "title": "Statusbar Commands",
+            "title": "Statusbar Scheduler",
             "properties": {
-                "statusbar_command.commands": {
-                    "type": [
-                        "array"
-                    ],
+                "statusbar_scheduler.schedules": {
+                    "type": ["array"],
+                    "description": "array of schedules",
                     "default": [
                         {
                             "text": "$(gear)",
                             "tooltip": "workspace settings",
+							"commandPostfix": "workspace_settings",
                             "alignment": "right",
-                            "command": "workbench.action.openWorkspaceSettings"
+                            "schedule": [
+								{ "command": "workbench.action.debug.start"},
+								{ "action": "delay", "args": ["200"] },
+								{ "command": "workbench.action.closePanel"},
+								{ "command": "workbench.action.togglePanel"}
+							]
                         }
                     ],
-                    "description": "array of commands",
                     "items": {
                         "type": "object",
                         "description": "command object",
                         "properties": {
-                            "alignment": {
-                                "type": [
-                                    "string",
-                                    "null"
-                                ],
-                                "enum": [
-                                    "left",
-                                    "right"
-                                ],
-                                "description": "The alignment of this item."
-                            },
-                            "priority": {
-                                "type": [
-                                    "number",
-                                    "null"
-                                ],
-                                "description": "The priority of this item. Higher value means the item should be shown more to the left."
-                            },
-                            "color": {
-                                "type": [
-                                    "string",
-                                    "null"
-                                ],
-                                "description": "The foreground color for this entry."
-                            },
-                            "command": {
-                                "type": "string",
-                                "description": "The identifier of a command to run on click."
-                            },
-                            "text": {
+							"text": {
                                 "type": "string",
                                 "description": "The text to show for the entry. You can embed icons in the text by leveraging the syntax: \"$(icon name)\". Where the icon-name is taken from the octicon icon set"
                             },
                             "tooltip": {
-                                "type": [
-                                    "string",
-                                    "null"
-                                ],
+                                "type": ["string","null"],
                                 "description": "The tooltip text when you hover over this entry."
+                            },
+							"triggerCommand": {
+								"type": ["string", "null"],
+								"description": "The command for triggering execution. Can be used for keybinding. (e.g. extension.scheduler.startDebug)"
+							},
+							"schedule": {
+                                "type": "array",
+								"description": "array of commands or actions",
+								"items": {
+									"type": "object",
+									"description": "Command or action object.",
+									"properties": {
+										"command": {
+											"type": ["string", "null"],
+											"description": "The identifier of a command."
+										},
+										"action": {
+											"type": ["string", "null"],
+											"description": "The identifier of an action."
+										},
+										"macro": {
+											"type": ["string", "null"],
+											"description": "The identifier of a macro."
+										},
+										"args": {
+											"type": ["array", "null"],
+											"description": "Arguments array for action.",
+											"items": {
+												"type": "string",
+												"description": "The argument."
+											}
+										}
+									}
+								}
+                            }, 
+                            "alignment": {
+                                "type": ["string", "null"],
+                                "enum": ["left", "right"],
+                                "description": "The alignment of this item."
+                            },
+                            "priority": {
+                                "type": ["number", "null"],
+                                "description": "The priority of this item. Higher value means the item should be shown more to the left."
+                            },
+                            "color": {
+                                "type": ["string", "null"],
+                                "description": "The foreground color for this entry."
                             },
                             "include": {
                                 "type": "string",
@@ -100,10 +112,68 @@
                         },
                         "required": [
                             "text",
-                            "command"
+                            "schedule"
                         ]
                     }
+                },
+				"statusbar_scheduler.macros": {
+					"type": ["array"],
+                    "description": "array of macros",
+					"default": [
+						{
+							"name": "startDebug",
+							"macro": [
+								{ "command": "workbench.action.debug.restart"},
+								{ "command": "workbench.action.debug.start"}
+							]
+						}, {
+							"name": "openPanel",
+							"macro": [
+								{ "command": "workbench.action.closePanel"},
+								{ "command": "workbench.action.togglePanel"}
+							]
+						}
+					],
+					"items": {
+						"type": "object",
+						"description": "Details of macro.",
+						"properties": {
+							"name": {
+								"type": "string",
+								"description": "The identifier of the macro."
+							},
+							"macro": {
+                                "type": "array",
+								"description": "array of commands or actions",
+								"items": {
+									"type": "object",
+									"description": "Command or action object.",
+									"properties": {
+										"command": {
+											"type": ["string", "null"],
+											"description": "The identifier of a command."
+										},
+										"action": {
+											"type": ["string", "null"],
+											"description": "The identifier of a action."
+										},
+										"args": {
+											"type": ["array", "null"],
+											"description": "Arguments array for action.",
+											"items": {
+												"type": "string",
+												"description": "The argument."
+											}
+										}
+									}
+								}
+                            }
+						}
+					}
+
+                    
                 }
+
             }
         }
     },
